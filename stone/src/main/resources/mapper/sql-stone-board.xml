@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.pe.stoneis.board.mapper.StoneBoardMapper">
+
+	<select id="selectBoardList" resultType="kr.pe.stoneis.board.dto.StoneBoardDto">
+	<![CDATA[
+		SELECT
+			NUM,
+			TITLE,
+			HIT_CNT,
+			DATE_FORMAT(REG_DATE, '%Y.%m.%d %H:%i:%s') AS REG_DATE,
+			REG_NAME
+		FROM
+			STONE_BOARD
+		WHERE
+			DEL_YN = 'N'
+		ORDER BY NUM DESC
+	]]>
+	</select>
+	
+	<insert id="insertBoard" parameterType="kr.pe.stoneis.board.dto.StoneBoardDto"
+		useGeneratedKeys="true" keyProperty="num">
+	<![CDATA[
+		INSERT INTO STONE_BOARD (
+			TITLE,
+			CONTENTS,
+			REG_DATE,
+			REG_NAME,
+			DEL_YN
+		) VALUES (
+			#{title},
+			#{contents},
+			NOW(),
+			#{regName},
+			'N'
+		)
+	]]>
+	</insert>
+	
+	<update id="updateHitCount" parameterType="int">
+	<![CDATA[
+		UPDATE STONE_BOARD SET
+			HIT_CNT = HIT_CNT + 1
+		WHERE
+			NUM = #{num}
+	]]>
+	</update>
+	
+	<select id="selectBoardDetail" parameterType="int" resultType="kr.pe.stoneis.board.dto.StoneBoardDto">
+	<![CDATA[
+		SELECT
+			NUM,
+			TITLE,
+			CONTENTS,
+			HIT_CNT,
+			DATE_FORMAT(REG_DATE, '%Y.%m.%d %H:%i:%s') AS REG_DATE,
+			REG_NAME
+		FROM
+			STONE_BOARD
+		WHERE
+			NUM = #{num}
+		AND
+			DEL_YN = 'N'
+		ORDER BY NUM DESC
+	]]>
+	</select>
+	
+	<update id="updateBoard" parameterType="kr.pe.stoneis.board.dto.StoneBoardDto">
+	<![CDATA[
+		UPDATE STONE_BOARD SET
+			TITLE = #{title},
+			CONTENTS = #{contents},
+			UPD_DATE = NOW(),
+			UPD_NAME = #{regName}
+		WHERE
+			NUM = #{num}
+	]]>
+	</update>
+	
+	<update id="deleteBoard" parameterType="int">
+	<![CDATA[
+		UPDATE STONE_BOARD SET
+			UPD_DATE = NOW(),
+			UPD_NAME = #{regName},
+			DEL_YN = 'Y'
+		WHERE
+			NUM = #{num}
+	]]>
+	</update>
+	
+	<insert id="insertBoardFileList" parameterType="kr.pe.stoneis.board.dto.StoneBoardFileDto">
+	<![CDATA[
+		INSERT INTO STONE_FILE 
+		(
+			NUM, ORIGINAL_FILE_NAME, FILE_PATH, FILE_SIZE, REG_DATE, REG_NAME
+		) VALUES
+	]]>
+		<foreach collection="list" item="item" separator=",">
+		(
+			#{item.num},
+			#{item.originalFileName},
+			#{item.filePath},
+			#{item.fileSize},
+			NOW(),
+			'stone'
+		)
+		</foreach>
+	</insert>
+	
+	<select id="selectBoardFileList" parameterType="int" resultType="kr.pe.stoneis.board.dto.StoneBoardFileDto">
+	<![CDATA[
+		SELECT
+			FILE_NUM, NUM, ORIGINAL_FILE_NAME,
+			FORMAT(ROUND(FILE_SIZE/1024), 0) AS FILE_SIZE
+		FROM
+			STONE_FILE
+		WHERE
+			NUM = #{num}
+		AND
+			DEL_YN = 'N'
+	]]>
+	</select>
+	
+	<select id="selectBoardFile" parameterType="map" resultType="kr.pe.stoneis.board.dto.StoneBoardFileDto">
+	<![CDATA[
+		SELECT
+			FILE_NUM, NUM, ORIGINAL_FILE_NAME,
+			FILE_PATH, FILE_SIZE
+		FROM
+			STONE_FILE
+		WHERE
+			FILE_NUM = #{fileNum}
+		AND NUM = #{num}
+		AND DEL_YN = 'N'
+	]]>
+	</select>
+	
+</mapper>

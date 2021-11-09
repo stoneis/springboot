@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>blog.naver.com/musasin84</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+</head>
+<body>
+
+	<table border="1">
+		<colgroup>
+			<col width="15%" />
+			<col width="*" />
+			<col width="15%" />
+			<col width="20%" />
+		</colgroup>
+		<thead>
+		<tr>
+			<th scope="col">글번호</th>
+			<th scope="col">제목</th>
+			<th scope="col">조회수</th>
+			<th scope="col">작성일</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+			<td th:text="${list.num}"></td>
+			<td>
+				<a href="/stone/jpa/board/" th:attrappend="href=${list.num}" th:text="${list.title}"></a>
+			</td>
+			<td th:text="${list.hitCnt}"></td>
+			<td th:text="${list.regDate}"></td>
+		</tr>
+		<tr th:unless="${#lists.size(list)} > 0">
+			<td colspan="4" align="center">조회된 결과가 없습니다.</td>
+		</tr>
+		</tbody>
+	</table>
+	
+	<a href="/stone/jpa/board/write">글 쓰기</a>
+
+</body>
+</html>

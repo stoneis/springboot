@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>blog.naver.com/musasin84</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var wForm = $("#wForm")[0];
+			
+			$("#list").on("click", function() {
+				location.href = "/stone/jpa/board";
+			});
+			$("#edit").on("click", function() {
+				$("#method").val("put");
+				wForm.action = "/stone/jpa/board/"+$("#num").val();
+				wForm.submit();
+			});
+			$("#delete").on("click", function() {
+				$("#method").val("delete");
+				wForm.action = "/stone/jpa/board/"+$("#num").val();
+				wForm.submit();
+			});
+		});
+	
+	</script>
+</head>
+<body>
+	<h2>게시판 상세조회</h2>
+	<form id="wForm" name="wForm" method="post">
+	<input type="hidden" id="num" name="num" th:value="${board.num}" />
+	<input type="hidden" id="method" name="_method" />
+	
+	<table border="1">
+		<colgroup>
+			<col width="15%" />
+			<col width="35%" />
+			<col width="15%" />
+			<col width="35%" />
+		</colgroup>
+		<tbody>
+		<tr>
+			<th scope="row">글번호</th>
+			<td th:text="${board.num}"></td>
+			<th scope="row">조회수</th>
+			<td th:text="${board.hitCnt}"></td>
+		</tr>
+		<tr>
+			<th scope="row">작성자</th>
+			<td>
+				<input type="text" id="regName" name="regName" th:value="${board.regName}" />
+			</td>
+			<th scope="row">작성일</th>
+			<td th:text="${board.regDate}"></td>
+		</tr>
+		<tr>
+			<th scope="row">제목</th>
+			<td colspan="3">
+				<input type="text" id="title" name="title" th:value="${board.title}" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<textarea id="contents" name="contents" th:text=${board.contents}></textarea>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">첨부파일</th>
+			<td colspan="3">
+				<a th:each="list : ${board.fileList}"
+					th:href="@{/stone/jpa/board/file(fileNum=${list.fileNum},num=${board.num})}"
+					 th:text="|${list.originalFileName}(${#numbers.formatInteger(list.fileSize/1000, 1, 'DEFAULT')} kb)|"></a>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<input type="button" id="list" value="목록" />
+	<input type="button" id="edit" value="수정" />
+	<input type="button" id="delete" value="삭제" />
+	</form>
+</body>
+</html>

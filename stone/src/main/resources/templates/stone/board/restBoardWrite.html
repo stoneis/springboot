@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>blog.naver.com/musasin84</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+</head>
+<body>
+	<h2>게시판 등록</h2>
+	<form id="wForm" name="wForm" method="post" action="/stone/board/write" enctype="multipart/form-data">
+	<table border="1">
+		<colgroup>
+			<col width="15%" />
+			<col width="*" />
+		</colgroup>
+		<tbody>
+		<tr>
+			<td>제목</td>
+			<td><input type="text" id="title" name="title" /></td>
+		</tr>
+		<tr>
+			<td>작성자</td>
+			<td><input type="text" id="regName" name="regName" /></td>
+		</tr>
+		<tr>
+			<td>내용</td>
+			<td><textarea id="contents" name="contents"></textarea></td>
+		</tr>
+		<tr>
+			<td>첨부파일</td>
+			<td><input type="file" id="files" name="files" multiple="multiple" /></td>
+		</tr>
+		</tbody>
+	</table>
+	<input type="submit" id="submit" value="저장" />
+	</form>
+
+</body>
+</html>

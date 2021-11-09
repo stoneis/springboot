@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>blog.naver.com/musasin84</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+
+</head>
+<body>
+	<h2>error page</h2>
+	<p th:text="${exception}"></p>
+	<ul th:each="list : ${exception.getStackTrace()}" th:text="${list.toString()}"></ul>
+</body>
+</html>
